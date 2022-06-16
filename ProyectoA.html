@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Proyecto</title>
+    <link href="Style.css" rel="stylesheet" type="text/css">
+    <script src="anime.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <script>
+      var iAux = 0;
+      var actividades = [[,],[,],[,],[,]];
+      var seleccionadasAux = [];
+
+      var final = [,,,];//S
+      var horasD = [,,,];//S
+      
+      function max(a, b){
+        return (a > b) ? a : b;
+      }
+      
+      function agregarEvento(){
+        var elemento1 = document.getElementById("actividad");
+        elemento1.addEventListener("click", leer);
+        var elemento2 = document.getElementById("iniciarG");
+        //elemento2.addEventListener("click",greedy);
+        elemento2.addEventListener("click",holaGreedy);
+        var elemento3 = document.getElementById("iniciarFB");
+        elemento3.addEventListener("click", fb);
+      }
+      
+      function holaFB(){
+        fb();
+        var columna = document.getElementById("greedy");
+        while (columna.firstChild){
+          columna.removeChild(columna.firstChild);
+        }
+        var prueba = document.createElement("p");
+        prueba.style.setProperty("font-size","18px");
+        columna.appendChild(prueba);
+        prueba.innerHTML = "Hola a todos";
+      }
+      
+      function leer(){
+        var RegistroInicio = document.getElementById("inicio");
+        var RegistroFin = document.getElementById("fin");
+        var inicioValor = RegistroInicio.value;
+        var finalValor = RegistroFin.value;
+        actividades [iAux][0] = inicioValor;
+        actividades [iAux][1] = finalValor;
+
+        final[iAux] = finalValor;
+        horasD[iAux] = finalValor - inicioValor;
+
+        var contenedorActividades = document.getElementById("contenedorActividades");
+        var nuevaActividad = document.createElement("div");
+        contenedorActividades.appendChild(nuevaActividad);
+        //nuevaActividad.style.setProperty("pointer-events","none");
+        //nuevaActividad.style.setProperty("position","relative");
+        nuevaActividad.style.setProperty("width","153px");
+        nuevaActividad.style.setProperty("height","33px");
+        nuevaActividad.style.setProperty("background-color","#97CADB");
+        nuevaActividad.style.setProperty("margin","4px");
+        nuevaActividad.style.setProperty("display","inline-block");
+        nuevaActividad.setAttribute("id",'' + iAux);
+        nuevaActividad.setAttribute("class", "unaAc");
+        nuevaActividad.innerHTML = "Inicio = " + inicioValor + "  ,  " + "Final = " + finalValor;
+        RegistroInicio.value = "";
+        RegistroFin.value = "";
+        iAux++;
+      }
+      
+      function movimiento1(){
+        var actividad0 = anime({
+          targets: '.unaAc',
+          translateY: 150,
+          translateX: -500,
+          autoplay: false,
+          duration:2000,
+        });
+        actividad0.play();
+      }
+      
+      function movimiento2(){
+        var actividad1 = anime({
+          targets: '.unaAc',
+          translateX: 435,
+          duration: 2000
+        });
+        actividad1.play(); 
+      }
+      
+      function holaGreedy(){
+        greedy();
+      }
+      
+      function actividadesOrdenadas(actividades2,n){
+        var ordenamiento = document.createElement("p");
+        var primero = document.getElementById("primeroText");
+        primero.appendChild(ordenamiento);
+        ordenamiento.style.setProperty("text-align","center");
+        ordenamiento.style.setProperty("font-family","Quicksand");
+        ordenamiento.style.setProperty("font-size","18px");
+        ordenamiento.innerHTML = "Se ordenan las actividades según su hora de finalización y tomamos la primera de ellas";
+        ordenamiento.style.setProperty("animation","letras");
+        ordenamiento.style.setProperty("animation-duration","3s");
+        var contenedorOrdenadas = document.getElementById("actividadesOrdenadas");
+        var k;
+        for(k=0;k<n;k++){
+          var actividadOrdenada = document.createElement("div");
+          contenedorOrdenadas.appendChild(actividadOrdenada);
+          actividadOrdenada.style.setProperty("width","153px");
+          actividadOrdenada.style.setProperty("height","33px");
+          actividadOrdenada.style.setProperty("background-color","#97CADB");
+          actividadOrdenada.style.setProperty("margin","4px");
+          actividadOrdenada.style.setProperty("display","inline-block");
+          actividadOrdenada.setAttribute("id","o" + '' + k);
+          actividadOrdenada.setAttribute("class", "unaAcOrd" + '' + k);
+          actividadOrdenada.innerHTML = "Inicio = " + actividades2[k][0] + "  ,  " + "Final = " + actividades2[k][1];
+          actividadOrdenada.style.setProperty("animation","letras");
+          actividadOrdenada.style.setProperty("animation-duration","3s");
+        }
+      }
+      
+      function jalarPrimeraActividad(){
+        var ordenada1 = anime({
+          targets: '.unaAcOrd0',
+          translateY: 300,
+          delay:500,
+          duration: 2000
+        });
+        ordenada1.play();
+      }
+      
+      function jalarSiguienteActividad(i){
+        var ordenada1 = anime({
+          targets: '.unaAcOrd' + '' + i,
+          translateY: 300,
+          delay:500,
+          duration: 2000
+        });
+        ordenada1.play();
+      }
+      
+      function checarCondicion(){
+        var contExpCon = document.getElementById("explicacionCondicion");
+        var expCon = document.createElement("p");
+        contExpCon.appendChild(expCon);
+        expCon.style.setProperty("text-align","center");
+        expCon.style.setProperty("font-family","Quicksand");
+        expCon.style.setProperty("font-size","18px");
+        expCon.innerHTML = "Para ir ingresando las démas actividades, checamos la condición:";
+        expCon.style.setProperty("animation","letras");
+        expCon.style.setProperty("animation-duration","3s");
+      }
+      
+      function explicacionCondicion(){
+        var contExpCon = document.getElementById("explicacionCondicion2");
+        var expCon = document.createElement("p");
+        contExpCon.appendChild(expCon);
+        expCon.style.setProperty("text-align","center");
+        expCon.style.setProperty("font-family","Quicksand");
+        expCon.style.setProperty("font-size","18px");
+        expCon.innerHTML = "El inicio de la siguiente actividad debe ser mayor o igual al fin de la actividad actual";
+        expCon.style.setProperty("animation","letras");
+        expCon.style.setProperty("animation-duration","3s");
+      }
+      
+      function condicion(inicio, final,i){
+        var condicion = document.getElementById("centro");
+        var expCon = document.createElement("p");
+        condicion.appendChild(expCon);
+        expCon.style.setProperty("text-align","center");
+        expCon.style.setProperty("font-family","Quicksand");
+        expCon.style.setProperty("font-size","18px");
+        expCon.style.setProperty("width","250px");
+        expCon.style.setProperty("align","250px");
+        expCon.setAttribute("id","condicionTexto" + '' + i);
+        expCon.innerHTML = inicio + " es mayor o igual a " + final + " ?" ;
+        expCon.style.setProperty("animation","letras");
+        expCon.style.setProperty("animation-duration","3s");
+      }
+      
+      function textoFinal(){
+        var final = document.getElementById("textoFinal");
+        var finalT = document.createElement("p");
+        final.appendChild(finalT);
+        finalT.style.setProperty("text-align","center");
+        finalT.style.setProperty("font-family","Quicksand");
+        finalT.style.setProperty("font-size","18px");
+        finalT.innerHTML = "El diagrama queda de la siguiente manera";
+        finalT.style.setProperty("animation","letras");
+        finalT.style.setProperty("animation-duration","3s");
+      }
+      
+      function ponerColorTexto(i){
+        var texto = document.getElementById("condicionTexto" + '' + i);
+        texto.style.setProperty("background-color","LawnGreen");
+      }
+      
+      function ponerColorTextoFalso(i){
+        var texto = document.getElementById("condicionTexto" + '' + i);
+        texto.style.setProperty("background-color","crimson");
+      }
+      
+      function borrarCondicion(inicio){
+        var cond = document.getElementById("condicionTexto" + '' + inicio);
+        cond.innerHTML = "";
+      }
+      
+      function relleno(){
+      }
+      
+      function ponerColor(i){
+        var actividad = document.getElementById("o" + '' + i);
+        actividad.style.setProperty("background-color","#018ABE");
+      }
+      
+      function borrarColor(i){
+        var actividad = document.getElementById("o" + '' + i);
+        actividad.style.setProperty("background-color","#97CADB");
+      }
+      
+      function lineaTiempo(){
+        google.charts.load("current", {packages:["timeline"]});
+        google.charts.setOnLoadCallback(drawChart);
+      }
+      
+      function drawChart(){
+        var container = document.getElementById('lineaT');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Room' });
+        dataTable.addColumn({ type: 'string', id: 'Name' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+        /*dataTable.addRows([
+          [ 'Magnolia Room', 'Beginning JavaScript',       new Date(0,0,0,1,0,0),  new Date(0,0,0,2,0) ],
+          [ 'Magnolia Room', 'Intermediate JavaScript',    new Date(0,0,0,2,0,0),  new Date(0,0,0,3,0,0) ],
+          [ 'Magnolia Room', 'Advanced JavaScript',        new Date(0,0,0,3,0,0),  new Date(0,0,0,4,0,0) ],
+          [ '' + 1,   'Beginning Google Charts',    new Date(0,0,0,4,0,0), new Date(0,0,0,5,0,0) ]]);*/
+        switch(seleccionadasAux.length){
+          case 1:
+          dataTable.addRows([
+            [ '' + 1 , 'Actividad 1',       new Date(0,0,0,seleccionadasAux[0][0],0,0),  new Date(0,0,0,seleccionadasAux[0][1],0) ]]);
+          break;
+          case 2:
+          dataTable.addRows([
+            [ '' + 1 , 'Actividad 1',       new Date(0,0,0,seleccionadasAux[0][0],0,0),  new Date(0,0,0,seleccionadasAux[0][1],0) ],
+            [ '' + 2, 'Activdad 2',    new Date(0,0,0,seleccionadasAux[1][0],0,0),  new Date(0,0,0,seleccionadasAux[1][1],0,0) ]]);
+          break;
+          case 3:
+          dataTable.addRows([
+            [ '' + 1 , 'Actividad 1',       new Date(0,0,0,seleccionadasAux[0][0],0,0),  new Date(0,0,0,seleccionadasAux[0][1],0) ],
+            [ '' + 2, 'Activdad 2',    new Date(0,0,0,seleccionadasAux[1][0],0,0),  new Date(0,0,0,seleccionadasAux[1][1],0,0) ],
+            [ '' + 3, 'Actividad 3',        new Date(0,0,0,seleccionadasAux[2][0],0,0),  new Date(0,0,0,seleccionadasAux[2][1],0,0) ]]);
+          break;
+          case 4:
+            dataTable.addRows([
+              [ '' + 1 , 'Actividad 1',       new Date(0,0,0,seleccionadasAux[0][0],0,0),  new Date(0,0,0,seleccionadasAux[0][1],0) ],
+              [ '' + 2, 'Activdad 2',    new Date(0,0,0,seleccionadasAux[1][0],0,0),  new Date(0,0,0,seleccionadasAux[1][1],0,0) ],
+              [ '' + 3, 'Actividad 3',        new Date(0,0,0,seleccionadasAux[2][0],0,0),  new Date(0,0,0,seleccionadasAux[2][1],0,0) ],
+              [ '' + 4,   'Actividad 4',    new Date(0,0,0,seleccionadasAux[3][0],0,0), new Date(0,0,0,seleccionadasAux[3][1],0,0) ]]);
+          break;
+        }
+        
+        var options = {
+          timeline: { colorByRowLabel: true }
+        };
+        
+        chart.draw(dataTable, options);
+      }
+      
+      function actividadesGreedy(actividades2,n){
+        var contFor = 0;
+        var seleccionadas =[];
+        actividades2 = actividades2.sort(function(a,b){
+          return a[1]-b[1];
+        });
+        //
+        setTimeout(actividadesOrdenadas, 4000, actividades2, n);
+        //
+        let i=0;
+        setTimeout(jalarPrimeraActividad,7000);
+        seleccionadas.push(actividades2[i]);
+        setTimeout(checarCondicion,11000);
+        setTimeout(explicacionCondicion,13000);
+        for(let j=1;j<n;j++){
+          setTimeout(ponerColor,(19000+ contFor),j);
+          setTimeout(condicion,(19000 + contFor),actividades2[j][0], actividades2[i][1],j);
+          if(actividades2[j][0] >= actividades2[i][1]){
+            setTimeout(ponerColorTexto,(23000 + contFor),j);
+            setTimeout(jalarSiguienteActividad,(24000 + contFor), j);
+            seleccionadas.push(actividades2[j]);
+            i = j;
+          }else{
+           setTimeout(ponerColorTextoFalso,(23000 + contFor),j);
+           }
+           setTimeout(borrarColor,(24000 + contFor),j);
+           contFor = contFor + 5000;
+          }
+          setTimeout(textoFinal, 35000);
+          seleccionadasAux = seleccionadas;
+          setTimeout(lineaTiempo, 38000);
+          return seleccionadas;
+        }
+        
+        function greedy(){
+          var columna = document.getElementById("greedy");
+          while (columna.firstChild){
+            columna.removeChild(columna.firstChild);
+          }
+          var opcionesGreedy = document.createElement("section");
+          opcionesGreedy.setAttribute("id","opcionGreedy");
+          var pT = document.createElement("section");
+          pT.setAttribute("id","primeroText");
+          var aO = document.createElement("section");
+          aO.setAttribute("id","actividadesOrdenadas");
+          aO.setAttribute("class","actividadesOrdenadas2");
+          var eC = document.createElement("section");
+          eC.setAttribute("id","explicacionCondicion");
+          var eC2 = document.createElement("section");
+          eC2.setAttribute("id","explicacionCondicion2");
+          columna.appendChild(opcionesGreedy);
+          var condicion = document.createElement("section");
+          condicion.setAttribute("id","condicion");
+          var centro = document.createElement("center");
+          centro.setAttribute("id","centro");
+          var textoFinal = document.createElement("section");
+          textoFinal.setAttribute("id","textoFinal");
+          var relleno = document.createElement("section");
+          var relleno2 = document.createElement("section");
+          var relleno3= document.createElement("section");
+          relleno.style.setProperty("height", "150px");
+          var linea = document.createElement("section");
+          linea.setAttribute("id","linea");
+          var tiempo = document.createElement("div");
+          tiempo.setAttribute("id","lineaT");
+          tiempo.style.setProperty("height","500px");
+          linea.appendChild(tiempo);
+          condicion.appendChild(centro);
+          opcionesGreedy.appendChild(pT);
+          opcionesGreedy.appendChild(aO);
+          opcionesGreedy.appendChild(eC);
+          opcionesGreedy.appendChild(eC2);
+          opcionesGreedy.appendChild(condicion);
+          opcionesGreedy.appendChild(relleno);
+          opcionesGreedy.appendChild(relleno2);
+          opcionesGreedy.appendChild(relleno3);
+          opcionesGreedy.appendChild(textoFinal);
+          opcionesGreedy.appendChild(linea);        
+          var selec = actividadesGreedy(actividades,iAux);
+        }
+        
+      //S
+      function fb(){
+        var f = MyMax(final);
+        var a = fuerzabruta(f, horasD, iAux+1);
+        alert(a);
+      }
+
+      //S
+      function fuerzabruta(f, horasD, n){
+        if (n==0 || f == 0) {
+          return 0;
+        }
+        if (horasD[n-1]>f) {
+          return fuerzabruta(f, horasD, n-1);
+        }else{
+          return max(horasD[n-1]+fuerzabruta(f-horasD[n-1], horasD, n-1),fuerzabruta(f, horasD, n-1));
+        }
+      }
+
+      //S
+      function MyMax(final){
+        var al = final.length;
+        var maximum = final[al-1];
+        while (al>=0){
+          if(final[al] > maximum){
+            maximum = final[al];
+          }
+          al--;
+        }
+        return maximum;
+      }
+
+      window.addEventListener("load",agregarEvento);
+
+      //TODO Insertar el codigo de fuerza bruta donde corresponda su ejecución
+    </script>
+    
+    <style>
+      .contenedorActividadesSection{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .FB{
+        width:350px;
+        height: 600px;
+        background-color: #02457A;
+      }
+      
+      .Gre{
+        width:1650px;
+        height: 600px;
+        background-color: #D6E8EE;
+      }
+      
+      .actividadesOrdenadas2{
+        display: flex;
+        justify-content: center;
+      }
+      
+      .ingresaActividades{
+        text-align: center;
+        font-size: 30px;
+        font-family: Quicksand;
+        color: white;
+      }
+
+      .FBp{
+        animation-name: p;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBo{
+        animation-name: o;
+        animation-delay: 1s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBr{
+        animation-name: r;
+        animation-delay: 2s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBf{
+        animation-name: f;
+        animation-delay: 3s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBu{
+        animation-name: u;
+        animation-delay: 4s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBe{
+        animation-name: e;
+        animation-delay: 5s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBr2{
+        animation-name: r2;
+        animation-delay: 6s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBz{
+        animation-name: z;
+        animation-delay: 7s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBa{
+        animation-name: a;
+        animation-delay: 8s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBb{
+        animation-name: b;
+        animation-delay: 9s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBr3{
+        animation-name: r3;
+        animation-delay: 10s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBu2{
+        animation-name: u2;
+        animation-delay: 11s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBt{
+        animation-name: t;
+        animation-delay: 12s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      .FBa2{
+        animation-name: a2;
+        animation-delay: 13s;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+      }
+      
+      @keyframes letras{
+        from{
+          opacity: 0;
+        }
+        50%{
+          opacity: 0.5;
+        }
+        to{
+          opacity: 1;
+        }
+      }
+
+      @keyframes p{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes o{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes r{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes f{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes u{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes e{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes r2{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes z{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes a{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes b{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes r3{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes u2{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes t{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+      @keyframes a2{
+        0%{color: chartreuse; font-size: large;}
+        50%{color: white;  font-size: medium;}
+        100%{color: chartreuse; font-size: large;}
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><img src="Bienestar.png" width="180" heigth="180">
+          <li><font face="Quicksand" color="White"><h1>EQUIPO DEL BIENESTAR 2.0</h1></font>
+          <li><font color="White"><b>Selección de Actividades:</b></font>
+          <li><a href="#FuerzaBruta">
+            <font color="Chartreuse">
+              <b class="FBp">P</b><b class="FBo">o</b><b class="FBr">r </b>
+              <b class="FBf">F</b><b class="FBu">u</b><b class="FBe">e</b><b class="FBr2">r</b><b class="FBz">z</b><b class="FBa">a </b>
+              <b class="FBb">B</b><b class="FBr3">r</b><b class="FBu2">u</b><b class="FBt">t</b><b class="FBa2">a</b>
+            </font>
+            </a>
+          <li><a href="#EjemploFuerza"><font color="#97CADB"><b>Ejemplo</b></font></a>
+          <li><a href="#Greedy"><font color="Chartreuse">
+              <b class="FBp">G</b><b class="FBo">r</b><b class="FBr">e</b><b class="FBf">e</b><b class="FBu">d</b><b class="FBe">y</b>
+            </font>
+            </a>
+          <li><a href="#EjemploGreedy"><font color="#97CADB"><b>Ejemplo</b></font></a>
+          <li><a href="#AnimacionIlustrativa"><font color="White"><b>Animación Ilustrativa</b></font></a>
+        </ul>
+      </nav>
+    </header>
+    <section>
+      <table>
+      <tr>
+        <th><font face="Quicksand"><h2 id="FuerzaBruta"><b>ALGORITMO POR FUERZA BRUTA</b></h2></font></th>
+      <tr>
+        <th><font face="Quicksand" font size= "4px"><p align= "justify">Dado un conjunto de actividades con su hora de inicio y fin, encontrar el número máximo de actividades que se pueden 
+          realizar tal que se obtenga el mayor número de horas de aprovechamiento respecto a la duración de cada actividad. Este algoritmo devuelve la duración de las actividades 
+          seleccionadas, de manera que busca entre todas las posibles combinaciones y se queda con la de mayor duración. Al no contemplar las horas de inicio de las actividades, puede 
+          ocurrir que se traslapen.</p></font></th>
+        <th><font face="Quicksand" font size= "5px"><b>Aplicaciones</b></font><br>
+          <ul align= "justify">
+              <li><font face="Quicksand" font size= "4px">Planificación de tareas a plazo fijo.</font>
+              <li><font face="Quicksand" font size= "4px">Selección de una solución optimizada para las actividades que debe ser completada por un individuo o con un programa.</font>
+              <li><font face="Quicksand" font size= "4px">Culminación del máximo número de actividades.</font>
+              <li><font face="Quicksand" font size= "4px">Ejecución de los programas automatizados para completar sin problemas una tarea automatizada.</font>
+              <li><font face="Quicksand" font size= "4px">Especificación correcta de los plazos de producción industrial.</font>
+              <li><font face="Quicksand" font size= "4px">Maximización de ganancias mediante la selección correcta del máximo beneficio.</font>
+          </ul>
+        </th>
+      </table>
+    </section>
+    <font face="Quicksand" align= "center"><b><h3 id="EjemploFuerza">EJEMPLO DEL ALGORITMO POR FUERZA BRUTA</h3></b></font>
+    <font face="Quicksand" size= "5px"><p align= "justify">El siguiente árbol muestra cómo el algoritmo por Fuerza Bruta llega a la solución de un problema. Para este ejemplo el usuario 
+    ingresó 3 actividades, cada una con un tiempo de inicio y otro de final, el primer nodo del árbol contiene un arreglo con las horas disponibles (<font color="#009900"><b>f</b></font>) y
+    el número máximo de actividades que se pueden realizar (<font color="#FF0000"><b>n</b></font>). Ahora bien, el algoritmo toma la primer actividad de derecha a izquierda y divide al nodo
+    padre en dos partes, el nodo hijo izquierdo mete la actividad al arreglo, lo que reduce el número de horas disponibles de acuerdo a la duración de dicha actividad y el número máximo de
+    actividades que se pueden realizar, mientras que el nodo hijo derecho <b>no</b> mete la actividad al arreglo, manteniendo así el número de horas disponibles intacto, pero el número 
+    máximo de actividades que se pueden realizar disminuye en 1 unidad. Este proceso se repite con cada uno de los nodos hijo tomando en cuenta las siguientes actividades que el usuario 
+    ingresó en un principio, entonces, entre más actividades sean ingresadas, más niveles tendrá el árbol, porque a partir del nivel 2, cada nivel corresponde al ánalisis de
+    una actividad diferente. El algoritmo se detiene cuando <font color="#009900"><b>f</b></font> ó <font color="#FF0000"><b>n</b></font> son igual a 0, por lo que la solución más optima 
+    que devuelve el algoritmo es cuando ambos valores del arreglo equivalen a 0, en el árbol siguiente se muestran con otro color los nodos que llevan a dicha solución.</p></font>
+    <p align= "center"><img src="EjemploBruta.png" width="1070" heigth="1070"></p>
+    <section>
+      <table>
+      <tr>
+        <th><font face="Quicksand"><b><h4 id="Greedy">GREEDY</h4></b></font></th>
+      <tr>
+        <th><font face="Quicksand" font size= "4px"><p align= "justify">Es un algoritmo que encuentra una solución globalmente óptima a un problema a base de hacer elecciones localmente 
+        óptimas. Es decir: el algoritmo siempre hace lo que “parece” mejor en cada momento, sin tener nunca que reconsiderar sus decisiones, y acaba llegando directamente a la mejor 
+        solución posible. Es una técnica bastante abstracta.</p></font></th>
+        <th><font face="Quicksand" font size= "5px"><b>Aplicaciones</b></font><br>
+          <ul align= "justify">
+              <li><font face="Quicksand" font size= "4px"><b>Selección de actividades:</b> Consiste en seleccionar un subconjunto  de las actividades propuestas de manera que sean 
+                  compatibles entre sí y que sea un subconjunto de cardinal máximo de entre los que forman subconjuntos compatibles.</font>
+              <li><font face="Quicksand" font size= "4px"><b>Problema de la mochila:</b> Consiste en llenar la mochila con fragmentos de objetos, maximizando la suma de los beneficios 
+                  (valores) transportados, y respetando la limitación de capacidad máxima.</font>
+              <li><font face="Quicksand" font size= "4px"><b>Código Huffman:</b> Consiste en representar los datos mas frecuentes con el menor número de bits posibles.</font>
+          </ul>
+        </th>
+      </table>
+    </section>
+    <font face="Quicksand" align= "center"><b><h5 id="EjemploGreedy">EJEMPLO DE GREEDY</h5></b></font>
+    <font face="Quicksand" size= "5px"><p align= "justify">Para ejemplificar el funcionamiento del algoritmo Greedy se utilizará la siguiente gráfica de barras. En este caso, el usuario dio
+    8 actividades de duración finita, el algoritmo toma la primer actividad y la mete a un arreglo (el cual puede observarse en la parte inferior de la gráfica). Cabe destacar que, este 
+    algoritmo primeramente ordena las actividades que el usuario ingresó de acuerdo a su tiempo de finalización antes de comenzar el análisis de cada actividad para ingresarlas al 
+    arreglo.</p></font>
+    <p align= "center"><img src="EjemploGreedy.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy2.png" width="980" heigth="980"></p>
+    <font face="Quicksand" size= "5px"><p align= "justify">Una vez que la primer actividad ya está dentro del arreglo, el algoritmo toma la siguiente y realiza el mismo procedimiento, pero
+    si esta última actividad se traslapa con la anterior, la omite y <b>no</b> la mete al arreglo. El algoritmo repite este proceso para todas y cada una de las actividades.</p></font>
+    <p align= "center"><img src="EjemploGreedy3.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy4.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy5.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy6.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy7.png" width="980" heigth="980"></p>
+    <p align= "center"><img src="EjemploGreedy8.png" width="980" heigth="980"></p>
+    <font face="Quicksand" size= "5px"><p align= "justify">Aunque Greedy sea más fácil de entender y más rápido en su ejecución que el de Fuerza Bruta, no siempre brinda la solución más
+    optima, pues como se observa a continuación para este ejemplo, Greedy dejó horas "muertas" en el arreglo final.</p></font>
+    <p align= "center"><img src="EjemploGreedy9.png" width="980" heigth="980"></p><br>
+    <font face="Quicksand" align= "center"><b><h6 id="AnimacionIlustrativa">ANIMACIÓN ILUSTRATIVA</h6></b></font>
+    
+    <section>
+      <table>
+        <tr>
+          <td id = "fuerzaBruta" class = "FB">
+            <p class = "ingresaActividades"><b>Ingresa las actividades:</b></p>
+            <section class = "contenedorActividadesSection">
+              <input type="text" id ="inicio" placeholder="Hora de inicio"><br>
+              <input type="text" id ="fin" placeholder="Hora de finalizacion">
+            </section><br><br><br>
+            <center>
+              <button id ="actividad">Ingresar Actividad</button>
+            </center><br><br>
+            <section id = "contenedorActividades"  class = "contenedorActividadesSection"></section><br><br>
+            <center>
+              <button id ="iniciarFB" class = "iniciar"> Iniciar algoritmo Fuerza Bruta </button><br><br><br>
+              <button id ="iniciarG" class = "iniciar"> Iniciar algoritmo Greedy </button>   
+            </center>
+          </td>
+          <td id = "greedy" class = "Gre" VALIGN="TOP" >
+          </td>
+        </tr>
+      </table>
+    </section><br><br>
+  
+  <footer>
+    <table>
+      <tr>
+        <td><font face="Quicksand" color="White"><h7>ALUMNOS:</h7></font></td>
+        <td><font face="Quicksand" color="White"><h7>PROYECTO FINAL</h7></font></td>
+        <td><font face="Quicksand" color="White"><h8>EQUIPO DEL BIENESTAR 2.0</h8></font></td>
+      <tr>
+        <td>
+          <ul>
+            <li><font face="Quicksand" color="White" size="4px">Guerrero Morales Antonio</font>
+            <li><font face="Quicksand" color="White" size="4px">Nava Romero Omar Aldahir</font>
+            <li><font face="Quicksand" color="White" size="4px">Osorio Gutiérrez Brad Israel</font>
+            <li><font face="Quicksand" color="White" size="4px">Zúñiga Grajeda Said Alejandro</font><br><br>
+          <ul>
+        </td>
+        <td>
+          <font face="Quicksand" color="White" size="4px">
+            GRUPO: 3CM14 <br><br>
+            PROFESOR: Franco Martínez Edgardo Adrián <br><br>
+            MATERIA: Análisis de Algoritmos <br><br>
+            FECHA: Junio del 2022
+          </font>
+        </td>
+        <td><h8><img src="Bienestar.png" width="300" heigth="300"></h8></td>
+      <tr>
+        <td><img src="IPN.png" width="200" heigth="200"></td>
+        <td>
+          <font face="Quicksand" color="White" size="5px">
+            INSTITUTO POLITECNICO NACIONAL <br><br>
+            ESCUELA SUPERIOR DE COMPUTO
+          </font>
+        </td>
+        <td><h8><img src="ESCOM.png" width="200" heigth="200"></h8></td>
+    </table>
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+li{
+  float: left;
+  list-style: none;
+  padding: 10px;
+  font-size: 17px;
+}
+
+nav{
+  float: right;
+  margin-top: 5px;
+  margin-right: 15px;
+}
+
+header{
+  height: 100px;
+  background-color: #001B48;
+  background-repeat: no-repeat;
+  background-size: cover;
+  Display: flex;
+}
+
+h1{
+  margin-top: 5px;
+  margin-right: 30px;
+  font-size: 30px;
+}
+
+section table{
+  margin-top: 20px;
+  margin-left: 240px;
+  margin-right: 240px;
+  background-color: #97CADB;
+}
+
+h2{
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+p{
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+th ul li{
+  list-style: disclosure-closed;
+  padding: 10px;
+}
+
+a{
+  text-decoration: none;
+}
+
+h3{
+  margin-top: 20px;
+  align: center;
+  font-size: 22px;
+}
+
+h4{
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+th ul li font b{
+  color: Red;
+}
+
+h5{
+  margin-top: 20px;
+  align: center;
+  font-size: 22px;
+}
+
+li a font b{
+  font-size: 17px;
+}
+
+h6{
+  margin-top: 20px;
+  align: center;
+  font-size: 22px;
+}
+
+footer{
+  height: 380px;
+  background-color: #001B48;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+h7{
+  margin-left: 100px;
+  margin-right: 250px;
+  font-size: 18px;
+}
+
+td ul li{
+  list-style: disclosure-closed;
+  color: white;
+  float: none;
+  padding: 6px;
+}
+
+h8{
+  margin-left: 100px;
+  font-size: 18px;
+}
