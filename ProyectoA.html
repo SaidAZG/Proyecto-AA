@@ -5,6 +5,8 @@
     <link href="Style.css" rel="stylesheet" type="text/css">
     <script src="anime.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+    
     
     <script>
       var iAux = 0;
@@ -13,7 +15,11 @@
 
       var final = [,,,];//S
       var horasD = [,,,];//S
-      
+      var banderaAlgo = false;
+      var nodosHijos = 1;
+      var idLineas = 100;
+      var contP = 0;
+      var arrPadres = [];
       function max(a, b){
         return (a > b) ? a : b;
       }
@@ -25,19 +31,37 @@
         //elemento2.addEventListener("click",greedy);
         elemento2.addEventListener("click",holaGreedy);
         var elemento3 = document.getElementById("iniciarFB");
-        elemento3.addEventListener("click", fb);
+        elemento3.addEventListener("click", holaFB);
+        var elemento4 = document.getElementById("reiniciar");
+        elemento4.addEventListener("click",reiniciarAct);
+      }
+
+      function reiniciarAct(){
+        location.reload();
       }
       
       function holaFB(){
-        fb();
+        
         var columna = document.getElementById("greedy");
         while (columna.firstChild){
           columna.removeChild(columna.firstChild);
         }
-        var prueba = document.createElement("p");
+        /*var prueba = document.createElement("p");
         prueba.style.setProperty("font-size","18px");
         columna.appendChild(prueba);
-        prueba.innerHTML = "Hola a todos";
+        prueba.innerHTML = "Hola a todos";*/
+        if(banderaAlgo){
+          var contenedor = document.createElement("div");
+          contenedor.style.setProperty("width","42%");
+          contenedor.style.setProperty("height","92%");
+          contenedor.style.setProperty("position","absolute");
+          contenedor.setAttribute("id","cy");
+          columna.appendChild(contenedor);
+          fb();
+        }else{
+          alert("No has ingresado actividades");
+        }
+        
       }
       
       function leer(){
@@ -45,28 +69,36 @@
         var RegistroFin = document.getElementById("fin");
         var inicioValor = RegistroInicio.value;
         var finalValor = RegistroFin.value;
-        actividades [iAux][0] = inicioValor;
-        actividades [iAux][1] = finalValor;
+        if(inicioValor=="" || finalValor==""){
+          alert("No ingresaste algun dato");
+        }else if(inicioValor>24 || finalValor>24){
+          alert("Hora mayor a 24, invalida");
 
-        final[iAux] = finalValor;
-        horasD[iAux] = finalValor - inicioValor;
+        }else{
+          actividades [iAux][0] = inicioValor;
+          actividades [iAux][1] = finalValor;
 
-        var contenedorActividades = document.getElementById("contenedorActividades");
-        var nuevaActividad = document.createElement("div");
-        contenedorActividades.appendChild(nuevaActividad);
-        //nuevaActividad.style.setProperty("pointer-events","none");
-        //nuevaActividad.style.setProperty("position","relative");
-        nuevaActividad.style.setProperty("width","153px");
-        nuevaActividad.style.setProperty("height","33px");
-        nuevaActividad.style.setProperty("background-color","#97CADB");
-        nuevaActividad.style.setProperty("margin","4px");
-        nuevaActividad.style.setProperty("display","inline-block");
-        nuevaActividad.setAttribute("id",'' + iAux);
-        nuevaActividad.setAttribute("class", "unaAc");
-        nuevaActividad.innerHTML = "Inicio = " + inicioValor + "  ,  " + "Final = " + finalValor;
-        RegistroInicio.value = "";
-        RegistroFin.value = "";
-        iAux++;
+          final[iAux] = finalValor;
+          horasD[iAux] = finalValor - inicioValor;
+
+          var contenedorActividades = document.getElementById("contenedorActividades");
+          var nuevaActividad = document.createElement("div");
+          contenedorActividades.appendChild(nuevaActividad);
+          //nuevaActividad.style.setProperty("pointer-events","none");
+          //nuevaActividad.style.setProperty("position","relative");
+          nuevaActividad.style.setProperty("width","153px");
+          nuevaActividad.style.setProperty("height","33px");
+          nuevaActividad.style.setProperty("background-color","#97CADB");
+          nuevaActividad.style.setProperty("margin","4px");
+          nuevaActividad.style.setProperty("display","inline-block");
+          nuevaActividad.setAttribute("id",'' + iAux);
+          nuevaActividad.setAttribute("class", "unaAc");
+          nuevaActividad.innerHTML = "Inicio = " + inicioValor + "  ,  " + "Final = " + finalValor;
+          RegistroInicio.value = "";
+          RegistroFin.value = "";
+          iAux++;
+          banderaAlgo = true;
+        }
       }
       
       function movimiento1(){
@@ -90,7 +122,12 @@
       }
       
       function holaGreedy(){
-        greedy();
+        if(banderaAlgo){
+          greedy();
+        }else{
+          alert("No has ingresado actividades");
+        }
+          
       }
       
       function actividadesOrdenadas(actividades2,n){
@@ -287,7 +324,7 @@
         for(let j=1;j<n;j++){
           setTimeout(ponerColor,(19000+ contFor),j);
           setTimeout(condicion,(19000 + contFor),actividades2[j][0], actividades2[i][1],j);
-          if(actividades2[j][0] >= actividades2[i][1]){
+          if(Number(actividades2[j][0]) >= Number(actividades2[i][1])){
             setTimeout(ponerColorTexto,(23000 + contFor),j);
             setTimeout(jalarSiguienteActividad,(24000 + contFor), j);
             seleccionadas.push(actividades2[j]);
@@ -354,19 +391,104 @@
       //S
       function fb(){
         var f = MyMax(final);
-        var a = fuerzabruta(f, horasD, iAux+1);
+        var cy = cytoscape({
+          container: document.getElementById('cy'),
+          boxSelectionEnabled: false,
+          autounselectify: true,
+          elements: [
+          { data: { id: '' + 0 }}],
+
+          style: [
+            {
+              selector: 'node',
+              style: {
+                /*'width' : 0.5,
+                'height' : 0.5,*/
+                //'label': 'data(id)'
+                'label': 'data(id)'
+              }
+            },
+            {
+              selector: 'edge',
+              style: {
+                'label': 'data(id)'
+              }
+            }
+          ]
+
+          
+
+        });
+
+
+
+
+        var a = fuerzabruta(f, horasD, iAux+1,0,cy);
         alert(a);
+        alert(contP);
+        alert(arrPadres);
       }
 
-      //S
-      function fuerzabruta(f, horasD, n){
+      
+      function fuerzabruta(f, horasD, n,nodoPadre,cy){
         if (n==0 || f == 0) {
+          
           return 0;
         }
         if (horasD[n-1]>f) {
-          return fuerzabruta(f, horasD, n-1);
+          cy.add({
+            data: { id: '' + nodosHijos }
+          });
+
+          cy.add({
+            data: {
+            id: '' + idLineas,
+            source: '' + nodoPadre,
+            target: '' + nodosHijos
+          }});
+          nodosHijos++;
+          idLineas++;
+          var casoN = fuerzabruta(f, horasD, n-1,nodosHijos-1,cy);
+          return casoN;
         }else{
-          return max(horasD[n-1]+fuerzabruta(f-horasD[n-1], horasD, n-1),fuerzabruta(f, horasD, n-1));
+          cy.add({
+            data: { id: '' + nodosHijos }
+          });
+
+          cy.add({
+            data: {
+            id: '' + idLineas,
+            source: '' + nodoPadre,
+            target: '' + nodosHijos
+          }});
+          nodosHijos++;
+          idLineas++;
+          //contP = nodoPadre;
+          if(nodoPadre==0){
+
+          }else{
+            arrPadres.push(nodoPadre);
+          }
+
+          var casoS1 = horasD[n-1]+fuerzabruta(f-horasD[n-1], horasD, n-1,nodosHijos-1,cy);
+
+
+          /*cy.add({
+            data: { id: '' + nodosHijos }
+          });
+          
+          cy.add({
+            data: {
+            id: '' + idLineas,
+            source: '' + nodoPadre,
+            target: '' + nodosHijos
+          }});
+          nodosHijos++;
+          idLineas++;
+          */
+          var casoS2 = fuerzabruta(f, horasD, n-1,contP,cy); 
+          
+          return max(casoS1,casoS2);
         }
       }
 
@@ -695,6 +817,7 @@
             </section><br><br><br>
             <center>
               <button id ="actividad">Ingresar Actividad</button>
+              <button id ="reiniciar">Reiniciar</button>
             </center><br><br>
             <section id = "contenedorActividades"  class = "contenedorActividadesSection"></section><br><br>
             <center>
